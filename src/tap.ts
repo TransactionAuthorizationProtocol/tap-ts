@@ -1598,6 +1598,21 @@ export interface Settle extends TapMessageObject<"Settle"> {
 }
 
 /**
+ * Reject Code
+ * Machine-readable reason on a Reject: an ISO 20022 ExternalStatusReason1Code
+ * value from the TAIP-4 code table. Only listed codes may be sent; a receiver
+ * treats a code it does not recognise as absent.
+ *
+ * @see {@link https://github.com/TransactionAuthorizationProtocol/TAIPs/blob/main/TAIPs/taip-4.md | TAIP-4: Authorization Flow}
+ * @see {@link https://www.iso20022.org/catalogue-messages/additional-content-messages/external-code-sets | ISO 20022 External Code Sets}
+ */
+export type RejectCode =
+  /** InvalidCreditorAccountNumber: the rejecting agent does not hold the transaction's settlement address. */
+  | "AC03"
+  /** InconsistentWithEndCustomer: the party details do not match the rejecting agent's records for its customer, such as a beneficiary name that does not match the account holder. */
+  | "BE01";
+
+/**
  * Rejection Message
  * Rejects a proposed transfer with a reason.
  *
@@ -1609,6 +1624,12 @@ export interface Reject extends TapMessageObject<"Reject"> {
    * Human readable explanation of why the transfer was rejected
    */
   reason?: string;
+
+  /**
+   * Optional machine-readable reason for rejection
+   * What a receiving agent acts on; `reason` stays for people.
+   */
+  code?: RejectCode;
 }
 
 /**
